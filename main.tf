@@ -48,7 +48,3 @@ resource "azurerm_databricks_workspace" "this" {
   managed_resource_group_name = "${local.prefix}-workspace-rg"
   tags                        = local.tags
 }
-
-output "databricks_host" {
-  value = "https://${azurerm_databricks_workspace.this.workspace_url}/"
-}
