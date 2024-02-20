@@ -23,7 +23,7 @@ resource "random_string" "naming" {
 }
 
 locals {
-  prefix = "databricksdemo${random_string.naming.result}"
+  prefix = "dbeventshubdemo${random_string.naming.result}"
   tags = {
     Environment = var.environment
     Owner       = var.owner
@@ -36,11 +36,9 @@ resource "azurerm_resource_group" "this" {
   tags     = local.tags
 }
 
-resource "azurerm_databricks_workspace" "this" {
-  name                        = "${local.prefix}-workspace"
-  resource_group_name         = azurerm_resource_group.this.name
-  location                    = azurerm_resource_group.this.location
-  sku                         = "premium"
-  managed_resource_group_name = "${local.prefix}-workspace-rg"
-  tags                        = local.tags
+module "databricks" {
+  resource_group = azurerm_resource_group.this.name
+  source         = "./modules/databricks"
+  prefix         = local.prefix
+  tags           = local.tags
 }
