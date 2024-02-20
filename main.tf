@@ -22,15 +22,11 @@ resource "random_string" "naming" {
   length  = 6
 }
 
-data "external" "me" {
-  program = ["az", "account", "show", "--query", "user"]
-}
-
 locals {
   prefix = "databricksdemo${random_string.naming.result}"
   tags = {
-    Environment = "Demo"
-    Owner       = lookup(data.external.me.result, "name")
+    Environment = var.environment
+    Owner       = var.owner
   }
 }
 
